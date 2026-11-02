@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -63,15 +65,16 @@ const CategoriaPage = async (props: ISlugPageProps) => {
       <section className="mt-8">
         <h2 className="font-display text-3xl">Notas</h2>
         <ul className="mt-3 space-y-2">
-          {stories.map((article) => (
+          <AffiliateFeed list>{stories.map((article) => (
             <li key={article.slug}>
               <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
                 {article.title}
               </Link>
             </li>
-          ))}
+          ))}</AffiliateFeed>
         </ul>
       </section>
+      {stories.length < 6 && (stories.length > 0 || games.length > 0) ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
     </Container>
   );
 };

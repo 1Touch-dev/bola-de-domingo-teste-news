@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { ArticleAffiliateLayout } from "@/components/affiliate/ArticleAffiliateLayout";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,12 +65,17 @@ const ArticlePage = async (props: ISlugPageProps) => {
     if (!article) notFound();
     return (
       <Container className="py-10">
+        <ArticleAffiliateLayout>
+        <article className="mx-auto min-w-0 max-w-3xl">
         <h1 className="font-display text-4xl font-semibold">{article.title}</h1>
         <div className="mt-8 space-y-4 text-lg leading-relaxed">
           {article.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
+        </article>
+        </ArticleAffiliateLayout>
+        <AffiliateBanner preset="strip" className="mt-8" />
       </Container>
     );
   }
@@ -91,7 +98,8 @@ const ArticlePage = async (props: ISlugPageProps) => {
           { label: doc.title },
         ]}
       />
-      <article className="mx-auto mt-6 min-w-0 max-w-3xl">
+      <ArticleAffiliateLayout>
+      <article className="mx-auto min-w-0 max-w-3xl">
         {doc.sectionLabel ? (
           <p className="text-[11px] font-semibold tracking-[0.14em] text-accent uppercase">
             {doc.sectionLabel} · {formatPublished(doc.publishedAt)}
@@ -113,6 +121,8 @@ const ArticlePage = async (props: ISlugPageProps) => {
           <PartnerStrip banners={partners} variant="content" />
         </div>
       </article>
+      </ArticleAffiliateLayout>
+      {partners.length === 0 ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
       {more.length > 0 ? (
         <aside className="mx-auto mt-12 max-w-3xl border-t border-line pt-6">
           <h2 className="font-display text-2xl font-semibold">Segue na mesa</h2>

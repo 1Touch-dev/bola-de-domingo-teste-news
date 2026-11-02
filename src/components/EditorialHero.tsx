@@ -1,5 +1,6 @@
 "use client";
 
+import { AffiliatePlacement } from "@/components/affiliate/AffiliatePlacement";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { IEditorialBanner } from "@/lib/banners";
@@ -99,6 +100,7 @@ export const EditorialHero = (props: IEditorialHeroProps) => {
             ))}
           </div>
         ) : null}
+        <AffiliatePlacement />
       </div>
     </div>
   );

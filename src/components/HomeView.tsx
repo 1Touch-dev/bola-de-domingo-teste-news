@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import Link from "next/link";
 import {
   categorias,
@@ -202,7 +204,7 @@ export const HomeView = async () => {
         <Container className="py-12">
           <SectionHeading title="Últimas notas" href="/noticias" />
           <ul className="grid gap-4 md:grid-cols-2">
-            {latest.map((article) => (
+            <AffiliateFeed cards list>{latest.map((article) => (
               <li key={article.slug}>
                 <Link
                   href={`/noticias/${article.slug}`}
@@ -220,10 +222,12 @@ export const HomeView = async () => {
                   </p>
                 </Link>
               </li>
-            ))}
+            ))}</AffiliateFeed>
           </ul>
         </Container>
       ) : null}
+
+      <Container className="py-6"><AffiliateBanner preset="landscape" /></Container>
 
       <Container className="pb-4">
         <div className="max-w-md border border-line bg-panel p-5">

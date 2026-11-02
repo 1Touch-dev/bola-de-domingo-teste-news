@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pracas, pracaTable } from "@/data";
@@ -28,8 +30,9 @@ const PracasPage = () => (
         note="Vitória vale três pontos. Empate vale um. GP soma os gols da súmula. A Rodada da Copa não entra nesta soma. Não é tabela da CBF, do Brasileirão nem de clube."
       />
     </div>
-    <ul className="mt-8 grid gap-4 md:grid-cols-2">
-      {pracas.map((praca) => (
+    <AffiliateBanner preset="landscape" className="mt-8" />
+      <ul className="mt-8 grid gap-4 md:grid-cols-2">
+      <AffiliateFeed cards list>{pracas.map((praca) => (
         <li key={praca.slug} className="border border-line bg-panel p-4">
           <div className="flex items-start gap-3">
             <Stripe colors={praca.colors} />
@@ -46,7 +49,7 @@ const PracasPage = () => (
             </div>
           </div>
         </li>
-      ))}
+      ))}</AffiliateFeed>
     </ul>
   </Container>
 );

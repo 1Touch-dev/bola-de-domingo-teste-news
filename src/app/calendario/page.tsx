@@ -1,3 +1,4 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
 import { site } from "@/config/site";
 import { scheduledFixtures, sideName, upcomingFixtures } from "@/data";
@@ -85,6 +86,7 @@ const CalendarPage = async () => {
           <DayList rows={ahead} />
         </section>
       ) : null}
+      {marked.length + ahead.length + open.length > 0 ? <AffiliateBanner preset="landscape" className="mt-8" /> : null}
       {open.length > 0 ? (
         <section className="mt-10">
           <h2 className="font-display text-2xl">Súmula em aberto</h2>

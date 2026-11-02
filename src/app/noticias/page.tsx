@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { categoriaName } from "@/data";
@@ -25,7 +27,7 @@ const NewsPage = async () => {
         lede="O que a súmula confirma: praças, tardes e a semana de seleção que a mesa não transforma em tabela oficial."
       />
       <div className="mt-8 divide-y divide-line border-y border-line">
-        {stories.map((article) => (
+        <AffiliateFeed>{stories.map((article) => (
           <Link
             key={article.slug}
             href={`/noticias/${article.slug}`}
@@ -42,8 +44,9 @@ const NewsPage = async () => {
               <p className="mt-2 max-w-2xl text-muted">{article.excerpt}</p>
             </span>
           </Link>
-        ))}
+        ))}</AffiliateFeed>
       </div>
+      {stories.length < 6 && stories.length > 0 ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
     </Container>
   );
 };

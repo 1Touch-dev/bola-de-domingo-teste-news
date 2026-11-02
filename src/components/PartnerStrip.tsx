@@ -1,3 +1,4 @@
+import { AffiliatePlacement } from "@/components/affiliate/AffiliatePlacement";
 import Image from "next/image";
 import type { IPartnerBanner } from "@/lib/banners";
 
@@ -18,6 +19,7 @@ export const PartnerStrip = (props: IPartnerStripProps) => {
         : "h-28 w-auto max-w-full object-contain";
 
   return (
+    <>
     <div className={variant === "header" ? "border-b border-line bg-panel" : "bg-page"}>
       <div className={`mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-5 sm:px-8 ${variant === "header" ? "py-2" : "py-4"}`}>
         {banners.map((banner) => {
@@ -34,5 +36,7 @@ export const PartnerStrip = (props: IPartnerStripProps) => {
         })}
       </div>
     </div>
+    <div className="mx-auto w-full max-w-6xl px-5 sm:px-8"><AffiliatePlacement /></div>
+    </>
   );
 };

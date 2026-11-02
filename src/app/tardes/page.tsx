@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import { fixtures, tardeTable, tardes } from "@/data";
 import { pageMetadata } from "@/lib/seo";
@@ -30,13 +32,14 @@ const TardesPage = () => {
           note="Soma dos placares assinados do Circuito da Tarde. Não é classificação da CBF, da Libertadores nem de clube."
         />
       </div>
+      <AffiliateBanner preset="landscape" className="mt-8" />
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {tardes.map((tarde) => (
+        <AffiliateFeed cards list>{tardes.map((tarde) => (
           <li key={tarde.slug} id={tarde.slug} className="scroll-mt-28 border border-line bg-panel p-4">
             <h2 className="font-display text-2xl">{tarde.name}</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">{tarde.note}</p>
           </li>
-        ))}
+        ))}</AffiliateFeed>
       </ul>
       <section className="mt-10">
         <h2 className="font-display text-3xl">Rodadas do circuito</h2>

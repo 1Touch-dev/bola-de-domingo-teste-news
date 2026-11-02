@@ -1,3 +1,4 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -113,6 +114,7 @@ const SumulaPage = async (props: IFixturePageProps) => {
           <dd className="mt-1 text-sm">{fixture.status === FixtureStatusEnum.FINAL ? "Placar fechado" : "Placar aberto"}</dd>
         </div>
       </dl>
+      <AffiliateBanner preset="strip" className="mt-8" />
     </Container>
   );
 };

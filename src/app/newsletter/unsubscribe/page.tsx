@@ -1,3 +1,4 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
 import { envConfig } from "@/config/env";
 import { site } from "@/config/site";
@@ -54,6 +55,7 @@ const UnsubscribePage = async (props: IUnsubscribePageProps) => {
   return (
     <Container className="py-10">
       <PageHeader kicker={site.folder} title="Newsletter" lede={result} />
+      <AffiliateBanner preset="strip" className="mt-8" />
     </Container>
   );
 };

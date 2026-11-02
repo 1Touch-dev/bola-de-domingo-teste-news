@@ -1,3 +1,5 @@
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import { finishedDeskFixtures, loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
@@ -22,10 +24,11 @@ const ResultsPage = async () => {
         lede="Entra o placar que a mesa fechou. O placar abre a súmula: praça, tarde e gols. O grupo não mexe no número, e a federação não empresta a tabela."
       />
       <div className="mt-6">
-        {rows.map((fixture) => (
+        <AffiliateFeed>{rows.map((fixture) => (
           <FixtureRow key={fixture.id} fixture={fixture} />
-        ))}
+        ))}</AffiliateFeed>
       </div>
+      {rows.length < 6 && rows.length > 0 ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
     </Container>
   );
 };
