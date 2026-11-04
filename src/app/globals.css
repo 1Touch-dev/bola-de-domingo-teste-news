@@ -24,6 +24,7 @@
   --color-muted: var(--muted);
   --font-sans: var(--font-outfit);
   --font-display: var(--font-newsreader);
+  --font-serif: var(--font-newsreader);
 }
 
 html {
@@ -34,6 +35,61 @@ body {
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-outfit), sans-serif;
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+}
+
+.score-text {
+  font-family: var(--font-outfit), sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "ss01" 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.utility-label {
+  font-family: var(--font-outfit), sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.utility-label-soft {
+  font-family: var(--font-outfit), sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.text-muted {
+  color: color-mix(in srgb, var(--muted) 92%, var(--ink) 8%);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-newsreader), serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+blockquote,
+.cms-body blockquote,
+.cms-body .article-lede,
+.cms-body .article-body,
+.cms-body em {
+  font-family: var(--font-newsreader), serif;
+}
+
+.cms-body {
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.cms-body > :first-child {
+  margin-top: 0;
 }
 
 ::selection {
@@ -59,10 +115,25 @@ body {
   margin-top: 1.5rem;
   font-family: var(--font-newsreader), serif;
   font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 }
 
 .cms-body p {
   margin-top: 1rem;
+}
+
+.cms-body strong {
+  font-weight: 600;
+}
+
+.cms-body blockquote {
+  margin-top: 1.5rem;
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  font-size: 1.125rem;
+  font-style: italic;
+  color: var(--highlight);
 }
 
 .cms-body a {

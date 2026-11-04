@@ -14,7 +14,7 @@ export const FaqAccordion = (props: IFaqAccordionProps) => {
 
   return (
     <section className="mt-10 border-t border-line pt-6">
-      <h2 className="font-display text-3xl font-semibold">Perguntas frequentes</h2>
+      <h2 className="font-sans text-2xl font-semibold text-ink">Perguntas frequentes</h2>
       <div className="mt-4 divide-y divide-line border-y border-line">
         {items.map((item, index) => {
           const expanded = open === index;

@@ -69,7 +69,7 @@ export const SiteSearch = (props: ISiteSearchProps) => {
       <button
         type="button"
         onClick={handleOpen}
-        className="flex items-center gap-2 border border-line bg-page px-3 py-2 text-xs font-semibold tracking-[0.14em] text-ink uppercase hover:border-accent hover:text-accent"
+        className="utility-label-soft flex items-center gap-2 border border-line bg-page px-3 py-2 text-xs font-semibold text-ink hover:border-accent hover:text-accent"
         aria-label="Buscar"
         aria-keyshortcuts="Control+K Meta+K"
       >
@@ -102,7 +102,7 @@ export const SiteSearch = (props: ISiteSearchProps) => {
                 placeholder="Buscar praças, tardes e notas"
                 className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-muted"
               />
-              <button type="button" onClick={handleClose} className="bg-asphalt px-2 py-0.5 text-[10px] text-panel">
+              <button type="button" onClick={handleClose} className="utility-label-soft bg-asphalt px-2 py-0.5 text-[10px] text-panel">
                 ESC
               </button>
             </div>
@@ -133,7 +133,7 @@ export const SiteSearch = (props: ISiteSearchProps) => {
                             <span className="block truncate text-sm font-medium text-ink">{item.title}</span>
                             <span className="block truncate text-[11px] text-muted">{item.subtitle}</span>
                           </span>
-                          <span className="ml-auto shrink-0 bg-page px-2 py-0.5 text-[10px] text-muted">{item.type}</span>
+                          <span className="utility-label-soft ml-auto shrink-0 bg-page px-2 py-0.5 text-[10px] text-muted">{item.type}</span>
                         </button>
                       </li>
                     ))}

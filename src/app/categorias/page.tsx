@@ -21,7 +21,7 @@ const CategoriasPage = () => (
     <ul className="mt-8 grid gap-4 sm:grid-cols-2">
       <AffiliateFeed cards list>{categorias.map((item) => (
         <li key={item.slug} className="border border-line bg-panel p-5">
-          <h2 className="font-display text-3xl">
+          <h2 className="font-sans text-2xl font-semibold text-ink">
             <Link href={`/categorias/${item.slug}`} className="hover:text-accent">
               {item.name}
             </Link>

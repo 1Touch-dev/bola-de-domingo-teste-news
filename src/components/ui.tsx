@@ -27,10 +27,10 @@ export const PageHeader = (props: IPageHeaderProps) => {
   const { kicker, title, lede } = props;
 
   return (
-    <header className="border-b border-line pb-8">
-      <p className="text-[11px] font-semibold tracking-[0.18em] text-accent uppercase">{kicker}</p>
-      <h1 className="mt-2 max-w-3xl font-display text-4xl leading-tight font-semibold text-ink sm:text-5xl">{title}</h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">{lede}</p>
+    <header className="border-b border-line pb-10">
+      <p className="utility-label text-[11px] font-semibold text-accent">{kicker}</p>
+      <h1 className="mt-3 max-w-4xl font-display text-4xl leading-[1.02] font-semibold text-ink sm:text-5xl">{title}</h1>
+      <p className="mt-5 max-w-2xl text-[1.05rem] leading-8 text-muted">{lede}</p>
     </header>
   );
 };
@@ -46,13 +46,13 @@ export const SectionHeading = (props: ISectionHeadingProps) => {
   const { eyebrow, title, href, actionLabel = "Ver todas" } = props;
 
   return (
-    <div className="mb-5 flex items-end justify-between gap-4 border-b-2 border-asphalt pb-2">
+    <div className="mb-6 flex items-end justify-between gap-4 border-b-2 border-asphalt pb-3">
       <div>
-        {eyebrow ? <p className="text-[11px] font-semibold tracking-[0.16em] text-highlight uppercase">{eyebrow}</p> : null}
-        <h2 className="font-display text-2xl leading-none font-semibold text-ink sm:text-3xl">{title}</h2>
+        {eyebrow ? <p className="utility-label text-[11px] font-semibold text-highlight">{eyebrow}</p> : null}
+        <h2 className="font-display text-2xl leading-tight font-semibold text-ink sm:text-[2rem]">{title}</h2>
       </div>
       {href ? (
-        <Link href={href} className="text-xs font-semibold tracking-wide text-accent uppercase hover:text-asphalt">
+        <Link href={href} className="utility-label-soft text-xs font-semibold text-accent hover:text-asphalt">
           {actionLabel}
         </Link>
       ) : null}
@@ -93,13 +93,13 @@ export const ContextRow = (props: IContextRowProps) => {
     <article className="grid min-w-0 items-center gap-3 border-b border-line py-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
       <p className="min-w-0 text-xs capitalize text-muted">{match.startsAt ? formatKickoff(match.startsAt) : match.competition}</p>
       <div className="min-w-0">
-        <p className="text-[11px] font-semibold tracking-wide text-muted uppercase">{match.competition}</p>
+        <p className="utility-label text-[11px] font-semibold text-muted">{match.competition}</p>
         <div className="mt-1 grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
           <p className="flex min-w-0 items-center justify-end gap-2 text-right text-sm font-medium">
             <span className="truncate">{match.homeName}</span>
             <TeamLogo src={match.homeLogo} label={match.homeName} size="xs" />
           </p>
-          <p className="shrink-0 bg-asphalt px-2 py-1 text-center font-display text-lg text-panel tabular-nums">{match.score ?? "A disputar"}</p>
+          <p className="score-text shrink-0 bg-asphalt px-2 py-1 text-center text-lg text-panel">{match.score ?? "A disputar"}</p>
           <p className="flex min-w-0 items-center gap-2 text-sm font-medium">
             <TeamLogo src={match.awayLogo} label={match.awayName} size="xs" />
             <span className="min-w-0 truncate">{match.awayName}</span>
@@ -174,11 +174,11 @@ export const FixtureRow = (props: IFixtureRowProps) => {
   return (
     <article className="grid min-w-0 items-center gap-3 border-b border-line py-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
       <p className="min-w-0 text-xs text-muted">
-        <span className="block font-semibold tracking-wide text-highlight uppercase">{categoriaName(fixture.categoria)}</span>
+        <span className="utility-label-soft block font-semibold text-highlight">{categoriaName(fixture.categoria)}</span>
         <span className="mt-1 block capitalize">{formatKickoff(fixture.startsAt)}</span>
       </p>
       <div className="min-w-0">
-        <p className="text-[11px] font-semibold tracking-wide text-muted uppercase">{fixture.competition}</p>
+        <p className="utility-label text-[11px] font-semibold text-muted">{fixture.competition}</p>
         <div className="mt-1 grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
           <Link href={sideHref(fixture.homeSlug)} className="flex min-w-0 items-center justify-end gap-2 text-right text-sm font-medium hover:text-accent">
             <span className="truncate">{sideName(fixture.homeSlug)}</span>
@@ -186,7 +186,7 @@ export const FixtureRow = (props: IFixtureRowProps) => {
           </Link>
           <Link
             href={`/resultados/${fixture.id}`}
-            className="shrink-0 bg-asphalt px-2 py-1 text-center font-display text-lg text-panel tabular-nums hover:bg-accent"
+            className="score-text shrink-0 bg-asphalt px-2 py-1 text-center text-lg text-panel hover:bg-accent"
           >
             {fixture.score ?? (fixture.status === FixtureStatusEnum.PROGRAMADO ? "vs" : "—")}
           </Link>
@@ -197,7 +197,7 @@ export const FixtureRow = (props: IFixtureRowProps) => {
         </div>
         <p className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-muted">
           <span>{fixture.venue}</span>
-          <Link href={`/resultados/${fixture.id}`} className="font-semibold tracking-wide text-accent uppercase">
+          <Link href={`/resultados/${fixture.id}`} className="utility-label font-semibold text-accent">
             {fixture.status === FixtureStatusEnum.FINAL ? "Súmula" : "Ficha"}
           </Link>
         </p>

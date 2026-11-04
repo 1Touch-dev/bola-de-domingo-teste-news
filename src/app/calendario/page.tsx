@@ -1,11 +1,13 @@
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
 import { site } from "@/config/site";
-import { scheduledFixtures, sideName, upcomingFixtures } from "@/data";
+import { sideName } from "@/data";
+import { loadDeskFixtures, scheduledDeskFixtures, upcomingDeskFixtures } from "@/lib/deskFixtures";
 import { dayKey, formatDay } from "@/lib/format";
 import { getScheduledContextMatches } from "@/lib/contextFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { Container, ContextRow, FixtureRow, PageHeader } from "@/components/ui";
+import type { IFixture } from "@/types";
 
 export const metadata: Metadata = pageMetadata({
   title: "Calendário",
@@ -14,11 +16,11 @@ export const metadata: Metadata = pageMetadata({
 });
 
 interface IDayListProps {
-  rows: ReturnType<typeof scheduledFixtures>;
+  rows: IFixture[];
 }
 
-const groupByDay = (rows: ReturnType<typeof scheduledFixtures>) => {
-  const groups = new Map<string, ReturnType<typeof scheduledFixtures>>();
+const groupByDay = (rows: IFixture[]) => {
+  const groups = new Map<string, IFixture[]>();
   rows.forEach((fixture) => {
     const key = dayKey(fixture.startsAt);
     groups.set(key, [...(groups.get(key) ?? []), fixture]);
@@ -32,7 +34,7 @@ const DayList = (props: IDayListProps) => {
     <div className="mt-6 space-y-8">
       {groupByDay(rows).map(([key, dayRows]) => (
         <section key={key}>
-          <h2 className="font-display text-2xl capitalize">{formatDay(dayRows[0].startsAt)}</h2>
+          <h2 className="font-sans text-2xl capitalize font-semibold text-ink">{formatDay(dayRows[0].startsAt)}</h2>
           {dayRows.map((fixture) => (
             <FixtureRow key={fixture.id} fixture={fixture} />
           ))}
@@ -44,8 +46,9 @@ const DayList = (props: IDayListProps) => {
 
 const CalendarPage = async () => {
   const marked = await getScheduledContextMatches();
-  const games = scheduledFixtures();
-  const ahead = upcomingFixtures();
+  const liveFixtures = await loadDeskFixtures();
+  const games = scheduledDeskFixtures(liveFixtures);
+  const ahead = upcomingDeskFixtures(liveFixtures);
   const aheadIds = new Set(ahead.map((fixture) => fixture.id));
   const open = games.filter((fixture) => !aheadIds.has(fixture.id));
 
@@ -73,7 +76,7 @@ const CalendarPage = async () => {
       />
       {marked.length > 0 ? (
         <section className="mt-8">
-          <h2 className="font-display text-2xl">Seleção</h2>
+          <h2 className="font-sans text-2xl font-semibold text-ink">Seleção</h2>
           <p className="mt-2 text-sm text-muted">Jogos do feed. Não entram na Taça de Domingo.</p>
           {marked.map((match) => (
             <ContextRow key={match.id} match={match} />
@@ -82,17 +85,20 @@ const CalendarPage = async () => {
       ) : null}
       {ahead.length > 0 ? (
         <section className="mt-8">
-          <h2 className="font-display text-2xl">Marcados</h2>
+          <h2 className="font-sans text-2xl font-semibold text-ink">Marcados</h2>
           <DayList rows={ahead} />
         </section>
       ) : null}
       {marked.length + ahead.length + open.length > 0 ? <AffiliateBanner preset="landscape" className="mt-8" /> : null}
       {open.length > 0 ? (
         <section className="mt-10">
-          <h2 className="font-display text-2xl">Súmula em aberto</h2>
+          <h2 className="font-sans text-2xl font-semibold text-ink">Súmula em aberto</h2>
           <p className="mt-2 text-sm text-muted">A data já passou. O placar entra quando a mesa assinar.</p>
           <DayList rows={open} />
         </section>
+      ) : null}
+      {marked.length === 0 && ahead.length === 0 && open.length === 0 ? (
+        <p className="mt-8 max-w-2xl text-muted">Nenhum jogo programado veio da API no momento.</p>
       ) : null}
     </Container>
   );

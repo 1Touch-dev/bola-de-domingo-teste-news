@@ -1,12 +1,12 @@
-import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
-import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { byCategoria, categorias, fixtures, getCategoria } from "@/data";
+import { byCategoria, categorias, getCategoria } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
+import { loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
-import { CategoriaSlugEnum, type ISlugPageProps } from "@/types";
+import { CategoriaSlugEnum } from "@/types";
+import type { ISlugPageProps } from "@/types";
 import { Container, Crumb, FixtureRow, PageHeader } from "@/components/ui";
 
 const noteOnly = new Set<CategoriaSlugEnum>([
@@ -35,8 +35,9 @@ const CategoriaPage = async (props: ISlugPageProps) => {
   const categoria = getCategoria(slug);
   if (!categoria) notFound();
 
+  const [fixtures, stories] = await Promise.all([loadDeskFixtures(), loadDeskArticles()]);
   const games = byCategoria(categoria.slug, fixtures);
-  const stories = byCategoria(categoria.slug, await loadDeskArticles());
+  const relatedStories = byCategoria(categoria.slug, stories);
 
   return (
     <Container className="py-10">
@@ -51,7 +52,7 @@ const CategoriaPage = async (props: ISlugPageProps) => {
         <PageHeader kicker={categoria.where} title={categoria.name} lede={categoria.pitch} />
       </div>
       <section className="mt-8">
-        <h2 className="font-display text-3xl">Jogos</h2>
+        <h2 className="font-sans text-2xl font-semibold text-ink">Jogos</h2>
         {games.length > 0 ? (
           games.map((fixture) => <FixtureRow key={fixture.id} fixture={fixture} />)
         ) : (
@@ -63,18 +64,21 @@ const CategoriaPage = async (props: ISlugPageProps) => {
         )}
       </section>
       <section className="mt-8">
-        <h2 className="font-display text-3xl">Notas</h2>
-        <ul className="mt-3 space-y-2">
-          <AffiliateFeed list>{stories.map((article) => (
-            <li key={article.slug}>
-              <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
-                {article.title}
-              </Link>
-            </li>
-          ))}</AffiliateFeed>
-        </ul>
+        <h2 className="font-sans text-2xl font-semibold text-ink">Notas</h2>
+        {relatedStories.length > 0 ? (
+          <ul className="mt-3 space-y-2">
+            {relatedStories.map((article) => (
+              <li key={article.slug}>
+                <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
+                  {article.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 max-w-2xl text-muted">Ainda não há notas publicadas nesta categoria.</p>
+        )}
       </section>
-      {stories.length < 6 && (stories.length > 0 || games.length > 0) ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
     </Container>
   );
 };

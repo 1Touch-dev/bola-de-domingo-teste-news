@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { site } from "@/config/site";
-import { categoriaName, fixtures, parseScore, sideHref, sideName } from "@/data";
-import { loadDeskFixture } from "@/lib/deskFixtures";
+import { categoriaName, parseScore, sideHref, sideName } from "@/data";
+import { loadDeskFixture, loadDeskFixtures } from "@/lib/deskFixtures";
 import { formatKickoff } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { Container, Crest, Crumb, PageHeader } from "@/components/ui";
-import { CategoriaSlugEnum, FixtureStatusEnum, type IFixture, type IFixturePageProps } from "@/types";
+import { CategoriaSlugEnum, FixtureStatusEnum } from "@/types";
+import type { IFixture, IFixturePageProps } from "@/types";
 
 export const revalidate = 120;
 
@@ -25,7 +26,10 @@ const sumulaNote = (fixture: IFixture) => {
   return "Súmula assinada. Vitória vale três, empate vale um, e o placar entra na Taça de Domingo.";
 };
 
-export const generateStaticParams = () => fixtures.map((fixture) => ({ id: fixture.id }));
+export const generateStaticParams = async () => {
+  const fixtures = await loadDeskFixtures();
+  return fixtures.map((fixture) => ({ id: fixture.id }));
+};
 
 export const generateMetadata = async (props: IFixturePageProps): Promise<Metadata> => {
   const { params } = props;
@@ -87,30 +91,30 @@ const SumulaPage = async (props: IFixturePageProps) => {
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
         <Link href={sideHref(fixture.homeSlug)} className="flex items-center justify-end gap-3 text-right hover:text-accent">
-          <span className="font-display text-2xl font-semibold">{home}</span>
+          <span className="font-display text-2xl leading-tight font-semibold">{home}</span>
           <Crest slug={fixture.homeSlug} />
         </Link>
-        <p className="bg-asphalt px-4 py-3 text-center font-display text-4xl text-panel tabular-nums">
+        <p className="score-text bg-asphalt px-4 py-3 text-center text-4xl font-semibold text-panel">
           {fixture.score ?? "vs"}
         </p>
         <Link href={sideHref(fixture.awaySlug)} className="flex items-center gap-3 hover:text-accent">
           <Crest slug={fixture.awaySlug} />
-          <span className="font-display text-2xl font-semibold">{away}</span>
+          <span className="font-display text-2xl leading-tight font-semibold">{away}</span>
         </Link>
       </div>
       <dl className="mt-8 grid gap-4 border-t border-line pt-6 sm:grid-cols-3">
         <div>
-          <dt className="text-[11px] font-semibold tracking-wide text-muted uppercase">Praça / parada</dt>
+          <dt className="utility-label text-[11px] font-semibold text-muted">Praça / parada</dt>
           <dd className="mt-1 text-sm">{fixture.venue}</dd>
         </div>
         <div>
-          <dt className="text-[11px] font-semibold tracking-wide text-muted uppercase">Gols</dt>
+          <dt className="utility-label text-[11px] font-semibold text-muted">Gols</dt>
           <dd className="mt-1 text-sm tabular-nums">
             {goals ? `${home} ${goals[0]} · ${away} ${goals[1]}` : "Ainda sem gols na súmula"}
           </dd>
         </div>
         <div>
-          <dt className="text-[11px] font-semibold tracking-wide text-muted uppercase">Mesa</dt>
+          <dt className="utility-label text-[11px] font-semibold text-muted">Mesa</dt>
           <dd className="mt-1 text-sm">{fixture.status === FixtureStatusEnum.FINAL ? "Placar fechado" : "Placar aberto"}</dd>
         </div>
       </dl>

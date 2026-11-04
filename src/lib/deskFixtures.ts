@@ -1,8 +1,9 @@
 import { cache } from "react";
 import type { IFootballMatch } from "@/apis/matches/matches.type";
 import { envConfig } from "@/config/env";
-import { fixtures, pracas, tardes } from "@/data";
-import { CategoriaSlugEnum, FixtureStatusEnum, type IFixture } from "@/types";
+import { sortTable, tableFrom, pracas, tardes } from "@/data";
+import { CategoriaSlugEnum, FixtureStatusEnum } from "@/types";
+import type { IFixture } from "@/types";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
@@ -106,12 +107,10 @@ const fetchWebsiteFixtures = async (): Promise<IFixture[]> => {
 
 export const loadDeskFixtures = cache(async (): Promise<IFixture[]> => {
   try {
-    const live = await fetchWebsiteFixtures();
-    if (live.length > 0) return live;
+    return await fetchWebsiteFixtures();
   } catch {
-    return fixtures;
+    return [];
   }
-  return fixtures;
 });
 
 export const loadDeskFixture = cache(async (id: string): Promise<IFixture | null> => {
@@ -121,3 +120,21 @@ export const loadDeskFixture = cache(async (id: string): Promise<IFixture | null
 
 export const finishedDeskFixtures = (rows: IFixture[]) =>
   rows.filter((fixture) => fixture.status === FixtureStatusEnum.FINAL).sort((a, b) => b.startsAt.localeCompare(a.startsAt));
+
+export const scheduledDeskFixtures = (rows: IFixture[]) =>
+  [...rows].filter((fixture) => fixture.status === FixtureStatusEnum.PROGRAMADO).sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+
+export const upcomingDeskFixtures = (rows: IFixture[], now = Date.now()) =>
+  scheduledDeskFixtures(rows).filter((fixture) => {
+    const kickoff = Date.parse(fixture.startsAt);
+    return Number.isFinite(kickoff) && kickoff >= now;
+  });
+
+export const pracaDeskTable = (rows: IFixture[]) =>
+  sortTable(tableFrom(rows.filter((fixture) => fixture.competition.startsWith("Taça de Domingo")), pracas.map((praca) => praca.slug)));
+
+export const tardeDeskTable = (rows: IFixture[]) =>
+  sortTable(tableFrom(rows.filter((fixture) => fixture.competition.startsWith("Circuito da Tarde")), tardes.map((tarde) => tarde.slug)));
+
+export const fixturesForSlug = (rows: IFixture[], slug: string) =>
+  rows.filter((fixture) => fixture.homeSlug === slug || fixture.awaySlug === slug);

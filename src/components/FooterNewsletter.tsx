@@ -68,8 +68,8 @@ export const FooterNewsletter = (props: IFooterNewsletterProps) => {
           disabled={isSubmitting}
           className={
             onAccent
-              ? "w-fit bg-panel px-5 py-2 text-xs font-semibold tracking-[0.14em] text-accent uppercase hover:bg-asphalt hover:text-panel disabled:opacity-70"
-              : "w-fit bg-accent px-5 py-2 text-xs font-semibold tracking-[0.14em] text-panel uppercase hover:bg-asphalt disabled:opacity-70"
+              ? "utility-label-soft w-fit bg-panel px-5 py-2 text-xs font-semibold text-accent hover:bg-asphalt hover:text-panel disabled:opacity-70"
+              : "utility-label-soft w-fit bg-accent px-5 py-2 text-xs font-semibold text-panel hover:bg-asphalt disabled:opacity-70"
           }
         >
           {isSubmitting ? "Enviando…" : "Assinar"}

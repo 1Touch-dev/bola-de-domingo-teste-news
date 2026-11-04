@@ -1,9 +1,9 @@
-import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
-import { AffiliateFeed } from "@/components/affiliate/AffiliateFeed";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { articlesFor, categoriaName, fixturesFor, getPraca, pracas } from "@/data";
+import { categoriaName, getPraca, pracas } from "@/data";
+import { loadDeskArticles } from "@/lib/deskArticles";
+import { fixturesForSlug, loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { Container, Crumb, FixtureRow, PageHeader, Stripe } from "@/components/ui";
 import type { ISlugPageProps } from "@/types";
@@ -28,8 +28,9 @@ const PracaPage = async (props: ISlugPageProps) => {
   const praca = getPraca(slug);
   if (!praca) notFound();
 
-  const games = fixturesFor(praca.slug);
-  const stories = articlesFor(praca.slug);
+  const [fixtures, stories] = await Promise.all([loadDeskFixtures(), loadDeskArticles()]);
+  const games = fixturesForSlug(fixtures, praca.slug);
+  const relatedStories = stories.filter((article) => article.relatedSlugs.includes(praca.slug));
 
   return (
     <Container className="py-10">
@@ -48,28 +49,27 @@ const PracaPage = async (props: ISlugPageProps) => {
         Categorias: {praca.categorias.map((categoria) => categoriaName(categoria)).join(" · ")}
       </p>
       <section className="mt-8">
-        <h2 className="font-display text-3xl">Jogos</h2>
+        <h2 className="font-sans text-2xl font-semibold text-ink">Jogos</h2>
         <div className="mt-2">
           {games.map((fixture) => (
             <FixtureRow key={fixture.id} fixture={fixture} />
           ))}
         </div>
       </section>
-      {stories.length > 0 ? (
+      {relatedStories.length > 0 ? (
         <section className="mt-8">
-          <h2 className="font-display text-3xl">Notas</h2>
+          <h2 className="font-sans text-2xl font-semibold text-ink">Notas</h2>
           <ul className="mt-3 space-y-2">
-            <AffiliateFeed list>{stories.map((article) => (
+            {relatedStories.map((article) => (
               <li key={article.slug}>
                 <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
                   {article.title}
                 </Link>
               </li>
-            ))}</AffiliateFeed>
+            ))}
           </ul>
         </section>
       ) : null}
-      {stories.length < 6 && (stories.length > 0 || games.length > 0) ? <AffiliateBanner preset="strip" className="mt-8" /> : null}
     </Container>
   );
 };

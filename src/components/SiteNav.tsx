@@ -16,7 +16,7 @@ export const SiteNav = () => {
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         <button
           type="button"
-          className="py-3 text-xs font-semibold tracking-[0.16em] text-accent uppercase lg:hidden"
+          className="utility-label py-3 text-xs font-semibold text-accent lg:hidden"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >
@@ -30,7 +30,7 @@ export const SiteNav = () => {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`block px-3 py-3 text-xs font-semibold tracking-[0.14em] uppercase ${
+                  className={`utility-label-soft block px-3 py-3 text-xs font-semibold ${
                     active ? "bg-accent text-panel" : "text-panel/80 hover:bg-white/10 hover:text-panel"
                   }`}
                   aria-current={active ? "page" : undefined}

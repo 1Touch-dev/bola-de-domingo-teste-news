@@ -10,7 +10,7 @@ export const VideoBlock = (props: IVideoBlockProps) => {
 
   return (
     <section className="mt-10">
-      <h2 className="font-display text-3xl font-semibold">Vídeo</h2>
+      <h2 className="font-sans text-2xl font-semibold text-ink">Vídeo</h2>
       <div className="mt-4 grid gap-4">
         {videos.map((video) =>
           video.kind === "youtube" ? (

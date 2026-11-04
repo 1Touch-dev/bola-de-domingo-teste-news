@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { envConfig } from "@/config/env";
 import { site } from "@/config/site";
-import { articlesByDate } from "@/data";
 import {
   categoriesOf,
   coverFrom,
@@ -18,7 +17,8 @@ import {
   type IArticleVideo,
   type ICmsFaq,
 } from "@/lib/cmsArticle";
-import { ArticleCategoryEnum, CategoriaSlugEnum, type IArticle } from "@/types";
+import { ArticleCategoryEnum, CategoriaSlugEnum } from "@/types";
+import type { IArticle } from "@/types";
 import type { ICmsArticle } from "@/apis/articles/articles.type";
 
 const categoriaFrom = (labels: string[], title: string): CategoriaSlugEnum => {
@@ -101,12 +101,10 @@ const fetchCmsArticles = async (): Promise<IArticle[]> => {
 
 export const loadDeskArticles = cache(async (): Promise<IArticle[]> => {
   try {
-    const live = await fetchCmsArticles();
-    if (live.length > 0) return live;
+    return await fetchCmsArticles();
   } catch {
-    return articlesByDate();
+    return [];
   }
-  return articlesByDate();
 });
 
 export interface ILoadedArticle {

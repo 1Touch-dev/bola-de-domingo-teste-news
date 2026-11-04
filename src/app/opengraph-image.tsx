@@ -14,7 +14,7 @@ const OpenGraphImage = () =>
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#231910",
+          background: "linear-gradient(145deg, #1A120D 0%, #231910 58%, #3A2C22 100%)",
           color: "#FAF8F5",
           padding: "64px",
         }}
@@ -25,22 +25,39 @@ const OpenGraphImage = () =>
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: 96,
-              height: 96,
-              borderRadius: 48,
-              border: "8px solid #5B4636",
-              color: "#9A3412",
-              fontSize: 36,
-              fontWeight: 700,
+              width: 112,
+              height: 112,
+              borderRadius: 28,
+              background: "linear-gradient(180deg, rgba(250,248,245,0.12) 0%, rgba(250,248,245,0.03) 100%)",
+              border: "2px solid rgba(250,248,245,0.14)",
+              boxShadow: "0 14px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08)",
+              position: "relative",
             }}
           >
-            BD
+            <div
+              style={{
+                position: "absolute",
+                inset: 10,
+                borderRadius: 20,
+                border: "1px solid rgba(154,52,18,0.35)",
+              }}
+            />
+            <span
+              style={{
+                color: "#F4EFE4",
+                fontSize: 44,
+                fontWeight: 800,
+                letterSpacing: "-0.08em",
+              }}
+            >
+              BD
+            </span>
           </div>
-          <div style={{ display: "flex", fontSize: 24, letterSpacing: 4, color: "#5B4636" }}>BOLADEDOMINGO.COM</div>
+          <div style={{ display: "flex", fontSize: 24, letterSpacing: 6, color: "#D8B190" }}>BOLADEDOMINGO.COM</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 72, lineHeight: 1 }}>Bola de Domingo</div>
-          <div style={{ display: "flex", fontSize: 32, marginTop: 18, color: "#9A3412" }}>
+          <div style={{ display: "flex", fontSize: 76, lineHeight: 1, letterSpacing: "-0.04em" }}>Bola de Domingo</div>
+          <div style={{ display: "flex", fontSize: 32, marginTop: 18, color: "#E7B78E" }}>
             O futebol do domingo
           </div>
         </div>

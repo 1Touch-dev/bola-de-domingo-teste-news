@@ -1,5 +1,6 @@
-import { articles, categorias, fixtures, pracas, tardes } from "@/data/domingo";
-import { FixtureStatusEnum, type CategoriaSlugEnum, type IArticle, type IFixture, type IStandingRow } from "@/types";
+import { categorias, pracas, tardes } from "@/data/taxonomy";
+import { FixtureStatusEnum } from "@/types";
+import type { CategoriaSlugEnum, IFixture, IStandingRow } from "@/types";
 
 const names = new Map<string, string>([
   ...pracas.map((praca) => [praca.slug, praca.shortName] as const),
@@ -113,56 +114,11 @@ export const tableFrom = (rows: IFixture[], slugs: string[]) => {
   return [...map.values()];
 };
 
-export const pracaTable = sortTable(
-  tableFrom(
-    fixtures.filter((fixture) => fixture.competition.startsWith("Taça de Domingo")),
-    pracas.map((praca) => praca.slug),
-  ),
-);
-
-export const tardeTable = sortTable(
-  tableFrom(
-    fixtures.filter((fixture) => fixture.competition.startsWith("Circuito da Tarde")),
-    tardes.map((tarde) => tarde.slug),
-  ),
-);
-
 export const getPraca = (slug: string) => pracas.find((praca) => praca.slug === slug);
 
-export const getArticle = (slug: string) => articles.find((article) => article.slug === slug);
-
 export const getCategoria = (slug: string) => categorias.find((item) => item.slug === slug);
-
-export const articlesByDate = () => [...articles].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-
-export const fixturesFor = (slug: string) =>
-  fixtures.filter((fixture) => fixture.homeSlug === slug || fixture.awaySlug === slug);
-
-export const articlesFor = (slug: string) =>
-  articlesByDate().filter((article) => article.relatedSlugs.includes(slug));
 
 export const byCategoria = <T extends { categoria: CategoriaSlugEnum }>(slug: CategoriaSlugEnum, rows: T[]) =>
   rows.filter((row) => row.categoria === slug);
 
-export const scheduledFixtures = () =>
-  [...fixtures]
-    .filter((fixture) => fixture.status === FixtureStatusEnum.PROGRAMADO)
-    .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
-
-export const upcomingFixtures = (now = Date.now()) =>
-  scheduledFixtures().filter((fixture) => {
-    const kickoff = Date.parse(fixture.startsAt);
-    return Number.isFinite(kickoff) && kickoff >= now;
-  });
-
-export const finishedFixtures = () =>
-  [...fixtures]
-    .filter((fixture) => fixture.status === FixtureStatusEnum.FINAL)
-    .sort((a, b) => b.startsAt.localeCompare(a.startsAt));
-
-export const relatedArticles = (article: IArticle) =>
-  articlesByDate().filter(
-    (item) => item.slug !== article.slug && (item.categoria === article.categoria || item.category === article.category),
-  );
-
-export { articles, categorias, fixtures, pracas, tardes };
+export { categorias, pracas, tardes };

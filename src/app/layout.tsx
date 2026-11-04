@@ -18,6 +18,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   variable: "--font-newsreader",
   display: "swap",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {

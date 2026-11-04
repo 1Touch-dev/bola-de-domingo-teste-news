@@ -1,17 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import { nav, site } from "@/config/site";
 import { pracas, tardes } from "@/data";
 import { loadDeskArticles } from "@/lib/deskArticles";
-import { loadPartnerBanners } from "@/lib/banners";
-import { PartnerPopup } from "@/components/PartnerPopup";
-import { PartnerStrip } from "@/components/PartnerStrip";
 import { DeskDate } from "@/components/DeskDate";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteSearch } from "@/components/SiteSearch";
 import { Container } from "@/components/ui";
-import { SearchKindEnum, type ISearchItem } from "@/types";
+import { SearchKindEnum } from "@/types";
+import type { ISearchItem } from "@/types";
 
 interface ISiteShellProps {
   children: React.ReactNode;
@@ -45,12 +42,7 @@ const searchItems = async (): Promise<ISearchItem[]> => {
 
 export const SiteShell = async (props: ISiteShellProps) => {
   const { children } = props;
-  const [items, headerPartners, footerPartners, popupPartners] = await Promise.all([
-    searchItems(),
-    loadPartnerBanners("header"),
-    loadPartnerBanners("footer"),
-    loadPartnerBanners("popup"),
-  ]);
+  const items = await searchItems();
 
   return (
     <div className="flex min-h-full flex-col">
@@ -61,7 +53,7 @@ export const SiteShell = async (props: ISiteShellProps) => {
         Ir para o conteúdo
       </a>
       <header>
-        <div className="bg-ink text-[11px] tracking-wide text-panel/70 uppercase">
+        <div className="bg-ink text-[11px] text-panel/70">
           <Container className="flex items-center justify-between gap-4 py-2">
             <DeskDate className="capitalize" />
             <p className="hidden min-w-0 truncate sm:block">{site.tagline}</p>
@@ -69,21 +61,24 @@ export const SiteShell = async (props: ISiteShellProps) => {
           </Container>
         </div>
         <div className="border-b border-line bg-panel">
-          <Container className="flex items-center justify-between gap-6 py-4">
+          <Container className="flex items-center justify-between gap-6 py-5">
             <Link href="/" className="flex min-w-0 items-center gap-3" aria-label={site.name}>
-              <span className="grid size-12 shrink-0 place-items-center overflow-hidden bg-asphalt">
-                <Image src="/logo.png" alt="" width={48} height={48} unoptimized className="size-full object-cover" />
+              <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-line/70 bg-gradient-to-br from-mast via-asphalt to-ink p-1 shadow-[0_10px_24px_rgba(35,25,16,0.18)]">
+                <span className="relative grid size-full place-items-center overflow-hidden rounded-[10px] bg-asphalt ring-1 ring-white/8">
+                  <span className="absolute inset-[5px] rounded-[7px] border border-accent/35" />
+                  <span className="font-display text-[1.35rem] font-semibold leading-none tracking-[-0.08em] text-panel">BD</span>
+                </span>
               </span>
               <span className="min-w-0 leading-none">
-                <span className="block text-[11px] font-semibold tracking-[0.22em] text-highlight uppercase">Domingo</span>
-                <span className="mt-1 block font-display text-2xl leading-none font-semibold text-ink sm:text-3xl">{site.name}</span>
+                <span className="utility-label block text-[11px] font-semibold text-highlight">Domingo</span>
+                <span className="mt-1.5 block font-display text-2xl leading-none font-semibold text-ink sm:text-[2rem]">{site.name}</span>
               </span>
             </Link>
             <div className="flex shrink-0 items-center gap-3">
               <SiteSearch items={items} />
               <Link
                 href="/contato"
-                className="hidden bg-asphalt px-3 py-2 text-xs font-semibold tracking-[0.14em] text-panel uppercase sm:inline"
+                className="utility-label hidden bg-asphalt px-3 py-2 text-xs font-semibold text-panel sm:inline"
               >
                 Contato
               </Link>
@@ -91,39 +86,37 @@ export const SiteShell = async (props: ISiteShellProps) => {
           </Container>
         </div>
         <SiteNav />
-        <PartnerStrip banners={headerPartners} variant="header" />
       </header>
       <main id="conteudo" className="flex-1">
         {children}
       </main>
       <section className="mt-16 border-t-4 border-accent bg-asphalt text-panel">
-        <Container className="grid gap-8 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <Container className="grid gap-10 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.2em] text-accent uppercase">Newsletter</p>
-            <h2 className="mt-2 font-display text-4xl font-semibold">O boletim de domingo</h2>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-panel/75">
+            <p className="utility-label text-[11px] font-semibold text-accent">Newsletter</p>
+            <h2 className="mt-3 font-display text-4xl leading-tight font-semibold">O boletim de domingo</h2>
+            <p className="mt-4 max-w-md text-[0.97rem] leading-7 text-panel/75">
               Três notas e a semana da taça. Sem tabela da CBF.
             </p>
           </div>
-          <div className="bg-panel p-5 text-ink">
+          <div className="bg-panel p-6 text-ink">
             <FooterNewsletter id="briefing-newsletter-email" layout="stack" tone="paper" />
             <p className="mt-2 text-xs text-muted">Sem spam. A assinatura sai quando você pedir.</p>
           </div>
         </Container>
       </section>
-      <PartnerStrip banners={footerPartners} variant="footer" />
       <footer className="bg-ink text-panel">
-        <Container className="grid gap-8 py-10 sm:grid-cols-3">
+        <Container className="grid gap-8 py-12 sm:grid-cols-3">
           <div>
-            <p className="font-display text-2xl font-semibold">
+            <p className="font-display text-2xl leading-none font-semibold">
               Bola de <span className="text-accent">Domingo</span>
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-panel/60">
+            <p className="mt-4 text-[0.95rem] leading-7 text-panel/60">
               Mesa independente em São Paulo. Placares que a praça assina, não o boletim da federação.
             </p>
           </div>
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-panel/50 uppercase">Seções</p>
+            <p className="utility-label text-[11px] font-semibold text-panel/50">Seções</p>
             <ul className="mt-3 grid gap-2 text-sm text-panel/80">
               {nav.map((item) => (
                 <li key={item.href}>
@@ -135,7 +128,7 @@ export const SiteShell = async (props: ISiteShellProps) => {
             </ul>
           </div>
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-panel/50 uppercase">Mesa</p>
+            <p className="utility-label text-[11px] font-semibold text-panel/50">Mesa</p>
             <ul className="mt-3 grid gap-2 text-sm text-panel/80">
               <li>
                 <Link href="/sobre" className="hover:text-accent">
@@ -164,7 +157,6 @@ export const SiteShell = async (props: ISiteShellProps) => {
           © {new Date().getFullYear()} {site.name}. {site.city}, {site.country}. Horário de Brasília (GMT-3).
         </Container>
       </footer>
-      <PartnerPopup banners={popupPartners} />
     </div>
   );
 };

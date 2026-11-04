@@ -12,10 +12,9 @@ Component filenames are PascalCase (`SiteShell.tsx`, `HomeView.tsx`). Lib, data,
 
 ## Data
 
-Seed lives in `src/data/domingo.ts`. `src/data/index.ts` derives tables from signed fixtures.
+- Static praça, tarde, and categoria descriptors live in `src/data/taxonomy.ts`. `src/data/index.ts` now holds descriptor helpers (`sideName`, `sideHref`, `categoriaName`) and pure score/table utilities.
 
-- Taça de Domingo fixtures build `pracaTable`. Win 3, draw 1. GP is goals for. SG is goal difference.
-- Circuito da Tarde fixtures build `tardeTable`.
+- Taça de Domingo and Circuito da Tarde tables are derived from live fixtures in `src/lib/deskFixtures.ts`.
 - Rodada da Copa does not enter the Taça de Domingo table.
 - Seleção, mercado, and bastidores have notes and no signed official score.
 
@@ -27,9 +26,9 @@ Interfaces use an `I` prefix. Enums use an `Enum` suffix. See `memory-bank/api-p
 
 Editorial notes come from Brazil CMS: `GET {NEXT_PUBLIC_CMS_URL}/ai-articles?targetWebsite={NEXT_PUBLIC_WEBSITE_KEY}`. Defaults are `https://api.football360brazil.com/api` and `boladedomingo.com`. `src/lib/deskArticles.ts` maps the catalog onto `IArticle` and the desk renders that list. `articlesApis` uses the Axios `HttpService` for the same path. `SportsSync` warms the article query only.
 
-Scheduled articles in the future and `publishState=needs_review` stay off the desk. If the catalog is empty or the host fails, pages fall back to `src/data/domingo.ts`.
+Scheduled articles in the future and `publishState=needs_review` stay off the desk. If the catalog is empty or the host fails, pages render explicit empty states rather than local fallback content.
 
-Fixtures stay on the signed seed until `GET /football/matches?website=` returns rows whose two sides are praças or tardes. Club and federation extracts are dropped. A finished row links to `/resultados/[id]`, the súmula. Rodada da Copa still stays out of the Taça de Domingo table.
+Fixtures come from `GET /football/matches?website=` and are accepted only when the two sides map to praças or tardes. Club and federation extracts are dropped. A finished row links to `/resultados/[id]`, the súmula. Rodada da Copa still stays out of the Taça de Domingo table.
 
 ## Newsletter
 

@@ -32,7 +32,7 @@ export const ContactForm = () => {
         Mensagem
         <textarea name="message" required rows={5} className="border border-line bg-panel px-3 py-2 text-base text-ink" />
       </label>
-      <button type="submit" className="w-fit bg-accent px-5 py-2 text-xs font-semibold tracking-[0.14em] text-panel uppercase hover:bg-asphalt">
+      <button type="submit" className="utility-label-soft w-fit bg-accent px-5 py-2 text-xs font-semibold text-panel hover:bg-asphalt">
         Abrir e-mail
       </button>
       {sent ? (
