@@ -6,6 +6,7 @@ import { ArticleCardImage } from "@/components/ArticleCardImage";
 import { formatPublished } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { FaqAccordion } from "@/components/FaqAccordion";
+import { ReaderReaction } from "@/components/ReaderReaction";
 import { VideoBlock } from "@/components/VideoBlock";
 import { Container, Crumb } from "@/components/ui";
 import type { ISlugPageProps } from "@/types";
@@ -79,6 +80,7 @@ const ArticlePage = async (props: ISlugPageProps) => {
         <div className="cms-body mt-8 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: doc.html }} />
         <VideoBlock videos={doc.videos} />
         <FaqAccordion items={doc.faq} />
+        <ReaderReaction slug={doc.slug} articleId={doc.id} />
       </article>
       {more.length > 0 ? (
         <aside className="mx-auto mt-12 max-w-3xl border-t border-line pt-6">
