@@ -56,7 +56,7 @@ const organization = {
       name: site.name,
       url: site.url,
       email: site.email,
-      logo: { "@type": "ImageObject", url: `${site.url}/icon` },
+      logo: { "@type": "ImageObject", url: `${site.url}/logo.png` },
       publishingPrinciples: `${site.url}/sobre`,
       areaServed: {
         "@type": "Country",

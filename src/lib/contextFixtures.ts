@@ -67,7 +67,7 @@ const loadTeam = async (teamId: number, query: string): Promise<IContextMatch[]>
   try {
     const response = await fetch(
       `${envConfig.apiBaseUrl}/football/fixtures?team=${teamId}&season=${SEASON}&${query}`,
-      { signal: AbortSignal.timeout(25000), next: { revalidate: 3600 } },
+      { signal: AbortSignal.timeout(8000), next: { revalidate: 3600 } },
     );
     if (!response.ok) return [];
     const body = asRecord(await response.json());

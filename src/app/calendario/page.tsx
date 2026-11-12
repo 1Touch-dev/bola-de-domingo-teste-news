@@ -1,7 +1,9 @@
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import type { Metadata } from "next";
+import { SectionNotes } from "@/components/SectionNotes";
 import { site } from "@/config/site";
 import { sideName } from "@/data";
+import { loadArticlesForPath } from "@/lib/deskArticles";
 import { loadDeskFixtures, scheduledDeskFixtures, upcomingDeskFixtures } from "@/lib/deskFixtures";
 import { dayKey, formatDay } from "@/lib/format";
 import { getScheduledContextMatches } from "@/lib/contextFixtures";
@@ -45,8 +47,11 @@ const DayList = (props: IDayListProps) => {
 };
 
 const CalendarPage = async () => {
-  const marked = await getScheduledContextMatches();
-  const liveFixtures = await loadDeskFixtures();
+  const [marked, liveFixtures, notes] = await Promise.all([
+    getScheduledContextMatches(),
+    loadDeskFixtures(),
+    loadArticlesForPath("/calendario", 20),
+  ]);
   const games = scheduledDeskFixtures(liveFixtures);
   const ahead = upcomingDeskFixtures(liveFixtures);
   const aheadIds = new Set(ahead.map((fixture) => fixture.id));
@@ -98,8 +103,9 @@ const CalendarPage = async () => {
         </section>
       ) : null}
       {marked.length === 0 && ahead.length === 0 && open.length === 0 ? (
-        <p className="mt-8 max-w-2xl text-muted">Nenhum jogo programado veio da API no momento.</p>
+        <p className="mt-8 max-w-2xl text-muted">Nenhum jogo programado na mesa por enquanto.</p>
       ) : null}
+      <SectionNotes title="Notas do calendário" notes={notes} empty="Ainda não há notas do endpoint Calendário." />
     </Container>
   );
 };

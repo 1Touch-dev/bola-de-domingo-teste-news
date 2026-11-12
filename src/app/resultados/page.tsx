@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SectionNotes } from "@/components/SectionNotes";
+import { loadArticlesForPath } from "@/lib/deskArticles";
 import { finishedDeskFixtures, loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { Container, FixtureRow, PageHeader } from "@/components/ui";
@@ -12,7 +14,8 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const ResultsPage = async () => {
-  const rows = finishedDeskFixtures(await loadDeskFixtures());
+  const [fixtures, notes] = await Promise.all([loadDeskFixtures(), loadArticlesForPath("/resultados", 20)]);
+  const rows = finishedDeskFixtures(fixtures);
 
   return (
     <Container className="py-10">
@@ -28,8 +31,9 @@ const ResultsPage = async () => {
           ))}
         </div>
       ) : (
-        <p className="mt-6 max-w-2xl text-muted">Nenhum resultado assinado veio da API no momento.</p>
+        <p className="mt-6 max-w-2xl text-muted">Nenhum resultado assinado na mesa por enquanto.</p>
       )}
+      <SectionNotes title="Notas de partidas" notes={notes} empty="Ainda não há notas do endpoint Partidas." />
     </Container>
   );
 };

@@ -1,13 +1,50 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Crest } from "@/components/ui";
+import { matchesSearch } from "@/lib/format";
 import type { ISearchItem } from "@/types";
 
 interface ISiteSearchProps {
   items: ISearchItem[];
 }
+
+interface ISearchThumbProps {
+  item: ISearchItem;
+}
+
+const SearchThumb = (props: ISearchThumbProps) => {
+  const { item } = props;
+  const [failed, setFailed] = useState(false);
+
+  if (item.image && !failed) {
+    return (
+      <span className="relative size-10 shrink-0 overflow-hidden border border-line bg-page">
+        <Image
+          src={item.image}
+          alt=""
+          fill
+          sizes="40px"
+          unoptimized
+          className="object-cover"
+          onError={() => setFailed(true)}
+        />
+      </span>
+    );
+  }
+
+  if (item.slug) {
+    return <Crest slug={item.slug} size="sm" />;
+  }
+
+  return (
+    <span className="relative h-10 w-16 shrink-0 overflow-hidden border border-line bg-page">
+      <Image src="/brand/fallback.png" alt="Bola de Domingo" fill sizes="64px" className="object-contain" />
+    </span>
+  );
+};
 
 export const SiteSearch = (props: ISiteSearchProps) => {
   const { items } = props;
@@ -20,10 +57,7 @@ export const SiteSearch = (props: ISiteSearchProps) => {
   const results =
     query.trim().length > 1
       ? items
-          .filter((item) => {
-            const q = query.toLowerCase();
-            return item.title.toLowerCase().includes(q) || item.subtitle.toLowerCase().includes(q);
-          })
+          .filter((item) => matchesSearch(query, item.title, item.subtitle, item.href))
           .slice(0, 8)
       : [];
 
@@ -120,15 +154,7 @@ export const SiteSearch = (props: ISiteSearchProps) => {
                           onClick={() => handleSelect(item.href)}
                           className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-page"
                         >
-                          {item.slug ? (
-                            <Crest slug={item.slug} size="sm" />
-                          ) : (
-                            <span className="grid size-8 shrink-0 place-items-center bg-accent/10 text-accent">
-                              <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                                <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
-                              </svg>
-                            </span>
-                          )}
+                          <SearchThumb item={item} />
                           <span className="min-w-0">
                             <span className="block truncate text-sm font-medium text-ink">{item.title}</span>
                             <span className="block truncate text-[11px] text-muted">{item.subtitle}</span>

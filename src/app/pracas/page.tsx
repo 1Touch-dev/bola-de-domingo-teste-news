@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SectionNotes } from "@/components/SectionNotes";
 import { pracas } from "@/data";
+import { loadArticlesForPath } from "@/lib/deskArticles";
 import { loadDeskFixtures, pracaDeskTable } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { Container, PageHeader, Stripe } from "@/components/ui";
@@ -14,7 +16,8 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const PracasPage = async () => {
-  const rows = pracaDeskTable(await loadDeskFixtures());
+  const [fixtures, notes] = await Promise.all([loadDeskFixtures(), loadArticlesForPath("/pracas", 20)]);
+  const rows = pracaDeskTable(fixtures);
 
   return (
     <Container className="py-10">
@@ -23,15 +26,19 @@ const PracasPage = async () => {
         title="Praças"
         lede="Seis praças movem o domingo no país. A tarde define a tabela da taça. A copa da manhã vive no calendário, quando a mesa assina, e não numa lista de nomes."
       />
-      <div className="mt-8">
-        <StandingsTable
-          title="Taça de Domingo"
-          rows={rows}
-          href="/calendario"
-          sideLabel="Praça"
-          note="Vitória vale três pontos. Empate vale um. GP soma os gols da súmula. A Rodada da Copa não entra nesta soma. Não é tabela da CBF, do Brasileirão nem de clube."
-        />
-      </div>
+      {rows.some((row) => row.played > 0) ? (
+        <div className="mt-8">
+          <StandingsTable
+            title="Taça de Domingo"
+            rows={rows}
+            href="/calendario"
+            sideLabel="Praça"
+            note="Vitória vale três pontos. Empate vale um. GP soma os gols da súmula. A Rodada da Copa não entra nesta soma. Não é tabela da CBF, do Brasileirão nem de clube."
+          />
+        </div>
+      ) : (
+        <p className="mt-8 max-w-2xl text-muted">A tabela da taça aparece quando a mesa assinar os primeiros placares.</p>
+      )}
       <ul className="mt-8 grid gap-4 md:grid-cols-2">
         {pracas.map((praca) => (
           <li key={praca.slug} className="border border-line bg-panel p-4">
@@ -52,6 +59,11 @@ const PracasPage = async () => {
           </li>
         ))}
       </ul>
+      <SectionNotes
+        title="Notas de equipes e tabela"
+        notes={notes}
+        empty="Ainda não há notas dos endpoints Equipes ou Tabela de classificação."
+      />
     </Container>
   );
 };

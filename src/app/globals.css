@@ -123,6 +123,28 @@ blockquote,
   margin-top: 1rem;
 }
 
+.cms-body ul,
+.cms-body ol {
+  margin-top: 1rem;
+  padding-left: 1.35rem;
+}
+
+.cms-body ul {
+  list-style: disc;
+}
+
+.cms-body ol {
+  list-style: decimal;
+}
+
+.cms-body li {
+  margin-top: 0.35rem;
+}
+
+.cms-body li + li {
+  margin-top: 0.25rem;
+}
+
 .cms-body strong {
   font-weight: 600;
 }

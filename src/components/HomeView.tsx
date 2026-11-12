@@ -91,24 +91,20 @@ export const HomeView = async () => {
 
   return (
     <>
-      <div className="bg-asphalt text-panel">
-        <Container className="flex items-stretch">
-          {ticker.length > 0 ? (
-            <>
-              <p className="utility-label hidden shrink-0 self-center bg-highlight px-3 py-2 text-[11px] font-semibold sm:block">
-                Placar
-              </p>
-              <div className="score-strip flex min-w-0 flex-1 overflow-x-auto">
-                {ticker.map((fixture) => (
-                  <ScoreChip key={fixture.id} fixture={fixture} />
-                ))}
-              </div>
-            </>
-          ) : (
-            <p className="px-4 py-3 text-sm text-panel/75">Nenhum placar da API no momento.</p>
-          )}
-        </Container>
-      </div>
+      {ticker.length > 0 ? (
+        <div className="bg-asphalt text-panel">
+          <Container className="flex items-stretch">
+            <p className="utility-label hidden shrink-0 self-center bg-highlight px-3 py-2 text-[11px] font-semibold sm:block">
+              Placar
+            </p>
+            <div className="score-strip flex min-w-0 flex-1 overflow-x-auto">
+              {ticker.map((fixture) => (
+                <ScoreChip key={fixture.id} fixture={fixture} />
+              ))}
+            </div>
+          </Container>
+        </div>
+      ) : null}
 
       {matches.length > 0 || marked.length > 0 ? (
         <Container className="py-6">
@@ -136,8 +132,14 @@ export const HomeView = async () => {
           {marked.length > 0 ? (
             <ul className="mt-3 space-y-2">
               {marked.slice(0, 4).map((match) => (
-                <li key={match.id} className="border border-line bg-panel px-3 py-3 text-sm text-muted">
-                  {formatKickoff(match.startsAt)} · {match.homeName} vs {match.awayName}
+                <li key={match.id} className="flex flex-wrap items-center gap-2 border border-line bg-panel px-3 py-3 text-sm text-muted">
+                  <span className="shrink-0">{formatKickoff(match.startsAt)}</span>
+                  <span aria-hidden="true">·</span>
+                  <TeamLogo src={match.homeLogo} label={match.homeName} size="xs" />
+                  <span className="font-semibold text-ink">{match.homeName}</span>
+                  <span>vs</span>
+                  <span className="font-semibold text-ink">{match.awayName}</span>
+                  <TeamLogo src={match.awayLogo} label={match.awayName} size="xs" />
                 </li>
               ))}
             </ul>
@@ -148,7 +150,7 @@ export const HomeView = async () => {
       <Container className="grid min-w-0 gap-8 border-b border-line bg-panel py-8 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="min-w-0">
           {featured ? (
-            <article className="py-12 lg:pr-12">
+            <article className="py-6 lg:pr-12 lg:py-8">
               <div className="overflow-hidden border border-line bg-panel">
                 <ArticleCardImage src={featured.coverImage} alt={featured.title} sizes="(max-width: 1024px) 100vw, 70vw" />
                 <div className="p-6 sm:p-8">
@@ -160,8 +162,8 @@ export const HomeView = async () => {
                       {featured.title}
                     </Link>
                   </h1>
-                  <p className="mt-6 max-w-2xl text-[1.35rem] leading-9 text-muted">{featured.excerpt}</p>
-                  <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+                  <p className="mt-3 max-w-2xl text-[1.35rem] leading-9 text-muted">{featured.excerpt}</p>
+                  <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
                     <Link href={`/noticias/${featured.slug}`} className="utility-label-soft font-semibold text-accent">
                       Ler a nota
                     </Link>
@@ -174,27 +176,29 @@ export const HomeView = async () => {
               </div>
             </article>
           ) : (
-            <div className="py-12 lg:pr-12">
+            <div className="py-6 lg:pr-12 lg:py-8">
               <div className="border border-line bg-panel p-8">
                 <p className="utility-label text-[11px] font-semibold text-accent">Notícias</p>
                 <h1 className="mt-4 font-display text-4xl font-semibold text-ink">A mesa ainda está vazia</h1>
-                <p className="mt-4 max-w-2xl text-muted">Nenhuma nota da API chegou para abrir a home neste momento.</p>
+                <p className="mt-4 max-w-2xl text-muted">As notas da mesa ainda não foram publicadas. Volte em breve.</p>
               </div>
             </div>
           )}
         </div>
 
-        <aside className="border-l border-line lg:pl-8">
+        <aside className="relative min-h-0 border-l border-line">
           {rail.length > 0 ? (
-            <ul className="divide-y divide-line">
-              {rail.map((article) => (
-                <li key={article.slug}>
-                  <ArticleCard article={article} variant="rail" />
-                </li>
-              ))}
-            </ul>
+            <div className="lg:absolute lg:inset-0 lg:overflow-y-auto lg:pl-8">
+              <ul className="divide-y divide-line">
+                {rail.map((article) => (
+                  <li key={article.slug}>
+                    <ArticleCard article={article} variant="rail" />
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
-            <div className="p-6 text-sm text-muted">Sem manchetes adicionais da API no momento.</div>
+            <div className="p-6 text-sm text-muted lg:pl-8">Sem manchetes adicionais por enquanto.</div>
           )}
         </aside>
       </Container>
@@ -228,42 +232,42 @@ export const HomeView = async () => {
         </div>
       </Container>
 
-      <Container className="grid min-w-0 gap-12 pb-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <section className="min-w-0">
-          <SectionHeading title={roundTitle} href="/calendario" />
+      {upcoming.length > 0 || tableRows.some((row) => row.played > 0) ? (
+        <Container className="grid min-w-0 gap-12 pb-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           {upcoming.length > 0 ? (
-            <ul className="divide-y divide-line border-y border-line bg-panel">
-              {upcoming.map((fixture) => (
-                <li key={fixture.id} className="grid gap-1 px-4 py-3 sm:grid-cols-[7.5rem_1fr] sm:items-center">
-                  <p className="text-xs text-muted capitalize">{formatKickoff(fixture.startsAt)}</p>
-                  <p className="flex min-w-0 flex-wrap items-center gap-2 text-sm break-words">
-                    <Crest slug={fixture.homeSlug} size="xs" />
-                    <Link href={sideHref(fixture.homeSlug)} className="font-medium hover:text-accent">
-                      {sideName(fixture.homeSlug)}
-                    </Link>
-                    <span className="text-muted">vs</span>
-                    <Crest slug={fixture.awaySlug} size="xs" />
-                    <Link href={sideHref(fixture.awaySlug)} className="font-medium hover:text-accent">
-                      {sideName(fixture.awaySlug)}
-                    </Link>
-                    <span className="mt-0.5 block text-xs text-muted">{fixture.competition}</span>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="border border-line bg-panel px-4 py-4 text-sm text-muted">Nenhum jogo agendado veio da API no momento.</p>
-          )}
-        </section>
+            <section className="min-w-0">
+              <SectionHeading title={roundTitle} href="/calendario" />
+              <ul className="divide-y divide-line border-y border-line bg-panel">
+                {upcoming.map((fixture) => (
+                  <li key={fixture.id} className="grid gap-1 px-4 py-3 sm:grid-cols-[7.5rem_1fr] sm:items-center">
+                    <p className="text-xs text-muted capitalize">{formatKickoff(fixture.startsAt)}</p>
+                    <p className="flex min-w-0 flex-wrap items-center gap-2 text-sm break-words">
+                      <Crest slug={fixture.homeSlug} size="xs" />
+                      <Link href={sideHref(fixture.homeSlug)} className="font-medium hover:text-accent">
+                        {sideName(fixture.homeSlug)}
+                      </Link>
+                      <span className="text-muted">vs</span>
+                      <Crest slug={fixture.awaySlug} size="xs" />
+                      <Link href={sideHref(fixture.awaySlug)} className="font-medium hover:text-accent">
+                        {sideName(fixture.awaySlug)}
+                      </Link>
+                      <span className="mt-0.5 block text-xs text-muted">{fixture.competition}</span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
 
-        <StandingsTable
-          title="Taça de Domingo"
-          rows={tableRows}
-          href="/pracas"
-          sideLabel="Praça"
-          note="Tabela da mesa. Vitória vale três. Não é classificação da CBF, do Brasileirão nem de clube."
-        />
-      </Container>
+          <StandingsTable
+            title="Taça de Domingo"
+            rows={tableRows}
+            href="/pracas"
+            sideLabel="Praça"
+            note="Tabela da mesa. Vitória vale três. Não é classificação da CBF, do Brasileirão nem de clube."
+          />
+        </Container>
+      ) : null}
 
       <Container className="pb-8">
         <SectionHeading eyebrow="Cobertura" title="Categorias" href="/categorias" />

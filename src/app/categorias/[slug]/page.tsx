@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { byCategoria, categorias, getCategoria } from "@/data";
-import { loadDeskArticles } from "@/lib/deskArticles";
+import { SectionNotes } from "@/components/SectionNotes";
+import { loadArticlesForCategoria } from "@/lib/deskArticles";
 import { loadDeskFixtures } from "@/lib/deskFixtures";
 import { pageMetadata } from "@/lib/seo";
 import { CategoriaSlugEnum } from "@/types";
@@ -35,9 +35,11 @@ const CategoriaPage = async (props: ISlugPageProps) => {
   const categoria = getCategoria(slug);
   if (!categoria) notFound();
 
-  const [fixtures, stories] = await Promise.all([loadDeskFixtures(), loadDeskArticles()]);
+  const [fixtures, relatedStories] = await Promise.all([
+    loadDeskFixtures(),
+    loadArticlesForCategoria(categoria.slug, 40),
+  ]);
   const games = byCategoria(categoria.slug, fixtures);
-  const relatedStories = byCategoria(categoria.slug, stories);
 
   return (
     <Container className="py-10">
@@ -63,22 +65,7 @@ const CategoriaPage = async (props: ISlugPageProps) => {
           </p>
         )}
       </section>
-      <section className="mt-8">
-        <h2 className="font-sans text-2xl font-semibold text-ink">Notas</h2>
-        {relatedStories.length > 0 ? (
-          <ul className="mt-3 space-y-2">
-            {relatedStories.map((article) => (
-              <li key={article.slug}>
-                <Link href={`/noticias/${article.slug}`} className="hover:text-accent">
-                  {article.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 max-w-2xl text-muted">Ainda não há notas publicadas nesta categoria.</p>
-        )}
-      </section>
+      <SectionNotes notes={relatedStories} />
     </Container>
   );
 };

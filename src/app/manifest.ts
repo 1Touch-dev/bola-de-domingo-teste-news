@@ -10,7 +10,10 @@ const manifest = (): MetadataRoute.Manifest => ({
   background_color: "#f1efea",
   theme_color: "#231910",
   lang: "pt-BR",
-  icons: [{ src: "/icon", sizes: "32x32", type: "image/png", purpose: "any" }],
+  icons: [
+    { src: "/brand/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+    { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+  ],
 });
 
 export default manifest;

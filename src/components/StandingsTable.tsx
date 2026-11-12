@@ -14,6 +14,8 @@ interface IStandingsTableProps {
 export const StandingsTable = (props: IStandingsTableProps) => {
   const { title, rows, href, sideLabel = "Praça", note } = props;
   const table = sortTable(rows);
+  const hasResults = table.some((row) => row.played > 0);
+  if (!hasResults) return null;
 
   return (
     <section className="min-w-0">

@@ -3,6 +3,8 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
+  // CMS feeds are slow under parallel SSG; keep headroom above the default 60s.
+  staticPageGenerationTimeout: 120,
   trailingSlash: false,
   reactStrictMode: true,
   images: {

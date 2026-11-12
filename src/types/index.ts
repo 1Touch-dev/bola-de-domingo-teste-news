@@ -91,6 +91,7 @@ export interface ISearchItem {
   subtitle: string;
   href: string;
   slug?: string;
+  image?: string;
 }
 
 export interface ICrumbItem {

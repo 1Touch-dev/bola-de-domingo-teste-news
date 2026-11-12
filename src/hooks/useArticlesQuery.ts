@@ -10,7 +10,7 @@ export const useArticlesQuery = (params?: IArticleListParams) => {
   const isClient = useIsClient();
 
   return useQuery({
-    queryKey: [queryKeys.articles, params?.page, params?.limit, params?.category],
+    queryKey: [queryKeys.articles, params?.page, params?.limit, params?.category, params?.endpoint],
     queryFn: () => articlesApis.getAll(params),
     placeholderData: (prev) => prev,
     staleTime: 1000 * 30,

@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { loadArticleDocument, loadDeskArticles } from "@/lib/deskArticles";
+import { HOME_ARTICLE_ENDPOINT } from "@/lib/cmsEndpoints";
+import { loadArticleDocument, loadArticlesByEndpoint } from "@/lib/deskArticles";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleCardImage } from "@/components/ArticleCardImage";
 import { formatPublished } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { ReaderReaction } from "@/components/ReaderReaction";
+import { SocialShare } from "@/components/SocialShare";
 import { VideoBlock } from "@/components/VideoBlock";
 import { Container, Crumb } from "@/components/ui";
+import { site } from "@/config/site";
 import type { ISlugPageProps } from "@/types";
 
 export const revalidate = 120;
 
 const jsonScript = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c");
 
-export const generateStaticParams = async () => {
-  const stories = await loadDeskArticles();
-  return stories.map((article) => ({ slug: article.slug }));
-};
+// Generate and cache articles on first visit so CMS outages do not fail the build.
+export const generateStaticParams = (): { slug: string }[] => [];
 
 export const generateMetadata = async (props: ISlugPageProps): Promise<Metadata> => {
   const { params } = props;
@@ -45,10 +46,9 @@ const ArticlePage = async (props: ISlugPageProps) => {
   const { slug } = await params;
   const doc = await loadArticleDocument(slug);
   if (doc === "missing") notFound();
+  if (doc === "down") throw new Error("Article unavailable");
 
-  if (doc === "down") notFound();
-
-  const stories = await loadDeskArticles();
+  const stories = await loadArticlesByEndpoint(HOME_ARTICLE_ENDPOINT, 40);
   const others = stories.filter((item) => item.slug !== doc.slug);
   const sameSection = others.filter((item) => item.sectionLabel && item.sectionLabel === doc.sectionLabel);
   const more = (sameSection.length > 0 ? sameSection : others).slice(0, 3);
@@ -74,12 +74,14 @@ const ArticlePage = async (props: ISlugPageProps) => {
         <h1 className="mt-2 font-display text-4xl leading-[1.05] font-semibold sm:text-5xl">{doc.title}</h1>
         {doc.summary ? <p className="mt-4 text-lg text-muted">{doc.summary}</p> : null}
         {doc.authors.length > 0 ? <p className="mt-3 text-sm">Por {doc.authors.join(", ")}</p> : null}
+        <SocialShare url={`${site.url}/noticias/${doc.slug}`} title={doc.title} />
         <div className="mt-8 overflow-hidden border border-line">
           <ArticleCardImage src={doc.cover} alt={doc.title} sizes="(max-width: 768px) 100vw, 768px" />
         </div>
         <div className="cms-body mt-8 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: doc.html }} />
         <VideoBlock videos={doc.videos} />
         <FaqAccordion items={doc.faq} />
+        <SocialShare url={`${site.url}/noticias/${doc.slug}`} title={doc.title} />
         <ReaderReaction slug={doc.slug} articleId={doc.id} />
       </article>
       {more.length > 0 ? (

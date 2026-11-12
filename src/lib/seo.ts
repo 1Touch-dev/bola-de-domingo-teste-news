@@ -34,13 +34,13 @@ export const pageMetadata = (props: IPageMetaInput): Metadata => {
       locale: "pt_BR",
       type,
       publishedTime,
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: image || `${site.url}/brand/fallback.png` }],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: image ? [image] : undefined,
+      images: [image || `${site.url}/brand/fallback.png`],
     },
   };
 };

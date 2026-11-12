@@ -32,6 +32,22 @@ export const readingMinutes = (text: string) => {
   return Math.max(1, Math.round(words / 180));
 };
 
+/** Lowercase + strip diacritics so "inscricao" matches "Inscrição". */
+export const foldSearch = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+export const matchesSearch = (query: string, ...fields: Array<string | undefined>) => {
+  const tokens = foldSearch(query)
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 1);
+  if (tokens.length === 0) return false;
+  const haystack = foldSearch(fields.filter(Boolean).join(" "));
+  return tokens.every((token) => haystack.includes(token));
+};
+
 export const formatDeskDate = (date = new Date()) =>
   new Intl.DateTimeFormat("pt-BR", {
     weekday: "long",

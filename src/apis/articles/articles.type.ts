@@ -9,6 +9,10 @@ export interface ICmsSeo {
   keywords?: string[] | string;
 }
 
+export interface ICmsEndpointAssignment {
+  name?: string;
+}
+
 export interface ICmsArticle {
   _id?: string;
   id?: string;
@@ -29,10 +33,14 @@ export interface ICmsArticle {
   schemaMarkup?: Record<string, unknown> | null;
   videoUrls?: string[];
   markdownImages?: string[];
+  endpointAssignments?: ICmsEndpointAssignment[] | ICmsEndpointAssignment;
+  websiteSection?: string;
 }
 
 export interface IArticleListParams {
   page?: number;
   limit?: number;
   category?: string;
+  /** Exact CMS endpoint name (accents included), e.g. `Brasileirão`. */
+  endpoint?: string;
 }

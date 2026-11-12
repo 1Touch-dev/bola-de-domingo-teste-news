@@ -15,6 +15,9 @@ export const GET = async () => {
 ## Key Sections
 ${sections}
 - [RSS](${site.url}/rss.xml)
+- [Sitemap](${site.url}/sitemap.xml)
+- [Google News sitemap](${site.url}/news-sitemap.xml)
+- [Robots](${site.url}/robots.txt)
 
 ## Recent Content
 ${notes || "- A mesa ainda não publicou notas neste ciclo."}

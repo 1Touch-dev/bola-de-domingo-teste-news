@@ -14,14 +14,16 @@ export const SiteNav = () => {
   return (
     <nav aria-label="Seções" className="bg-asphalt text-panel">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <button
-          type="button"
-          className="utility-label py-3 text-xs font-semibold text-accent lg:hidden"
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? "Fechar" : "Seções"}
-        </button>
+        <div className="flex justify-end lg:block">
+          <button
+            type="button"
+            className="utility-label py-3 text-xs font-semibold text-accent lg:hidden"
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? "Fechar" : "Seções"}
+          </button>
+        </div>
         <ul className={`${open ? "grid gap-1 pb-3" : "hidden"} lg:flex lg:flex-wrap lg:gap-0 lg:pb-0`}>
           {nav.map((item) => {
             const active = isActive(pathname, item.href);

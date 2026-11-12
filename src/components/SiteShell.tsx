@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/BrandMark";
 import { nav, site } from "@/config/site";
 import { pracas, tardes } from "@/data";
-import { loadDeskArticles } from "@/lib/deskArticles";
+import { HOME_ARTICLE_ENDPOINT } from "@/lib/cmsEndpoints";
+import { loadArticlesByEndpoint } from "@/lib/deskArticles";
 import { DeskDate } from "@/components/DeskDate";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { SiteNav } from "@/components/SiteNav";
@@ -15,7 +17,8 @@ interface ISiteShellProps {
 }
 
 const searchItems = async (): Promise<ISearchItem[]> => {
-  const notes = await loadDeskArticles();
+  // Keep the shell on one feed so every static page does not fan out the full desk during SSG.
+  const notes = await loadArticlesByEndpoint(HOME_ARTICLE_ENDPOINT, 40);
   return [
     ...pracas.map((item) => ({
       type: SearchKindEnum.PRACA,
@@ -36,6 +39,7 @@ const searchItems = async (): Promise<ISearchItem[]> => {
       title: item.title,
       subtitle: item.excerpt,
       href: `/noticias/${item.slug}`,
+      image: item.coverImage,
     })),
   ];
 };
@@ -63,12 +67,7 @@ export const SiteShell = async (props: ISiteShellProps) => {
         <div className="border-b border-line bg-panel">
           <Container className="flex items-center justify-between gap-6 py-5">
             <Link href="/" className="flex min-w-0 items-center gap-3" aria-label={site.name}>
-              <span className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-line/70 bg-gradient-to-br from-mast via-asphalt to-ink p-1 shadow-[0_10px_24px_rgba(35,25,16,0.18)]">
-                <span className="relative grid size-full place-items-center overflow-hidden rounded-[10px] bg-asphalt ring-1 ring-white/8">
-                  <span className="absolute inset-[5px] rounded-[7px] border border-accent/35" />
-                  <span className="font-display text-[1.35rem] font-semibold leading-none tracking-[-0.08em] text-panel">BD</span>
-                </span>
-              </span>
+              <BrandMark className="size-12 sm:size-16" />
               <span className="min-w-0 leading-none">
                 <span className="utility-label block text-[11px] font-semibold text-highlight">Domingo</span>
                 <span className="mt-1.5 block font-display text-2xl leading-none font-semibold text-ink sm:text-[2rem]">{site.name}</span>
@@ -108,9 +107,10 @@ export const SiteShell = async (props: ISiteShellProps) => {
       <footer className="bg-ink text-panel">
         <Container className="grid gap-8 py-12 sm:grid-cols-3">
           <div>
-            <p className="font-display text-2xl leading-none font-semibold">
-              Bola de <span className="text-accent">Domingo</span>
-            </p>
+            <Link href="/" className="inline-flex items-center gap-3" aria-label={site.name}>
+              <BrandMark className="size-12 rounded-full bg-page" />
+              <span className="font-display text-2xl leading-none font-semibold">{site.name}</span>
+            </Link>
             <p className="mt-4 text-[0.95rem] leading-7 text-panel/60">
               Mesa independente em São Paulo. Placares que a praça assina, não o boletim da federação.
             </p>
@@ -144,11 +144,6 @@ export const SiteShell = async (props: ISiteShellProps) => {
                 <Link href="/termos" className="hover:text-accent">
                   Termos
                 </Link>
-              </li>
-              <li>
-                <a href={`mailto:${site.email}`} className="hover:text-accent">
-                  {site.email}
-                </a>
               </li>
             </ul>
           </div>

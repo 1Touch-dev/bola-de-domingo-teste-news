@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArticleCard } from "@/components/ArticleCard";
-import { loadDeskArticles } from "@/lib/deskArticles";
+import { HOME_ARTICLE_ENDPOINT } from "@/lib/cmsEndpoints";
+import { loadArticlesByEndpoint } from "@/lib/deskArticles";
 import { pageMetadata } from "@/lib/seo";
 import { Container, PageHeader } from "@/components/ui";
 
@@ -13,7 +14,12 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const NewsPage = async () => {
-  const stories = await loadDeskArticles();
+  const [section, home] = await Promise.all([
+    loadArticlesByEndpoint("Notícias", 40),
+    loadArticlesByEndpoint(HOME_ARTICLE_ENDPOINT, 40),
+  ]);
+  const seen = new Set(section.map((article) => article.slug));
+  const stories = [...section, ...home.filter((article) => !seen.has(article.slug))];
 
   return (
     <Container className="py-10">
@@ -22,7 +28,7 @@ const NewsPage = async () => {
         title="Notícias"
         lede="O que a súmula confirma: praças, tardes e a semana de seleção que a mesa não transforma em tabela oficial."
       />
-      {stories.length === 0 ? <p className="mt-8 max-w-2xl text-muted">Nenhuma nota publicada veio da API no momento.</p> : null}
+      {stories.length === 0 ? <p className="mt-8 max-w-2xl text-muted">Nenhuma nota publicada na mesa por enquanto.</p> : null}
       <div className="mt-8 divide-y divide-line border-y border-line">
         {stories.map((article) => (
           <ArticleCard key={article.slug} article={article} variant="list" />
