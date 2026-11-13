@@ -69,7 +69,6 @@ const nextConfig: NextConfig = {
     { source: "/alertas", destination: "/noticias", permanent: true },
     { source: "/ao-vivo", destination: "/resultados", permanent: true },
     { source: "/ao-vivo/:slug", destination: "/resultados", permanent: true },
-    { source: "/futebol", destination: "/", permanent: true },
     { source: "/estados", destination: "/pracas", permanent: true },
     { source: "/estados/:uf", destination: "/pracas", permanent: true },
     { source: "/liga/:slug", destination: "/categorias", permanent: true },

@@ -16,6 +16,6 @@ Niche stays on Sunday football across Brazil, read from São Paulo. Do not turn 
 - Husky 9.1.7: `prepare` is `husky`, `precommit` is `yarn lint && yarn build`, `.husky/pre-commit` and `.husky/pre-push` run `yarn precommit`.
 - No seed or dummy match/article data. Tables and placares come only from signed fixtures returned by the API. If the feed is empty, hide the section or show a short empty state — never invent scores.
 - Points: win 3, draw 1. Column GP is goals for. Column SG is goal difference. Rodada da Copa does not enter the Taça de Domingo table.
-- Newsletter client: `src/lib/newsletter.ts`. POST `{ email, website }` to the CMS `subscriptions/subscribe` (`NEXT_PUBLIC_CMS_URL` or `https://api.football360brazil.com/api`). Website is the apex host. Send the email as typed. 201 and 200 confirm; already subscribed is an error message. Timeout 10s. Footer and homepage forms use React Hook Form.
+- Newsletter client: `src/lib/newsletter.ts`. POST `{ email, website }` to the CMS `subscriptions/subscribe` (`NEXT_PUBLIC_CMS_URL` or `https://api.boladedomingo.com/api`). Website is the apex host. Send the email as typed. 201 and 200 confirm; already subscribed is an error message. Timeout 10s. Footer and homepage forms use React Hook Form.
 - Sports client uses TanStack Query and Axios HttpService. Desk pages use live `/ai-articles`, `/football/matches`, and related feeds only.
 - Keep this palette. Do not reuse the sibling desks' blush, crimson, teal, steel, sage, pine, sand, rose, gold, or chartreuse, and do not reuse the Guanabara bay-mist sheet.

@@ -1,39 +1,48 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { MatchRow } from "@/components/football/FootballBoard";
 import { SectionNotes } from "@/components/SectionNotes";
 import { loadArticlesForPath } from "@/lib/deskArticles";
-import { finishedDeskFixtures, loadDeskFixtures } from "@/lib/deskFixtures";
+import { getCrossLeagueFixtures } from "@/lib/football";
 import { pageMetadata } from "@/lib/seo";
-import { Container, FixtureRow, PageHeader } from "@/components/ui";
+import { Container, PageHeader } from "@/components/ui";
 
 export const revalidate = 120;
 
 export const metadata: Metadata = pageMetadata({
   title: "Resultados",
-  description: "Placares assinados das praças, da rodada da copa e das tardes do circuito. Cada súmula abre o detalhe.",
+  description: "Placares recentes de Brasileirão, Série B, Copa do Brasil, Libertadores e Seleção.",
   path: "/resultados",
 });
 
 const ResultsPage = async () => {
-  const [fixtures, notes] = await Promise.all([loadDeskFixtures(), loadArticlesForPath("/resultados", 20)]);
-  const rows = finishedDeskFixtures(fixtures);
+  const [{ completed }, notes] = await Promise.all([
+    getCrossLeagueFixtures(),
+    loadArticlesForPath("/resultados", 20),
+  ]);
 
   return (
     <Container className="py-10">
       <PageHeader
-        kicker="Súmula assinada"
+        kicker="Placar ao vivo da API"
         title="Resultados"
-        lede="Entra o placar que a mesa fechou. O placar abre a súmula: praça, tarde e gols. O grupo não mexe no número, e a federação não empresta a tabela."
+        lede="Últimos jogos encerrados nas competições da mesa. Cada placar abre a súmula com lances quando a API envia eventos."
       />
-      {rows.length > 0 ? (
+      {completed.length > 0 ? (
         <div className="mt-6">
-          {rows.map((fixture) => (
-            <FixtureRow key={fixture.id} fixture={fixture} />
+          {completed.map((match) => (
+            <MatchRow key={match.id} match={match} />
           ))}
         </div>
       ) : (
-        <p className="mt-6 max-w-2xl text-muted">Nenhum resultado assinado na mesa por enquanto.</p>
+        <p className="mt-6 max-w-2xl text-muted">Nenhum resultado recente nas competições cobertas por enquanto.</p>
       )}
-      <SectionNotes title="Notas de partidas" notes={notes} empty="Ainda não há notas do endpoint Partidas." />
+      <p className="mt-6">
+        <Link href="/futebol" className="utility-label text-xs font-semibold text-accent">
+          Ver classificação e artilharia
+        </Link>
+      </p>
+      <SectionNotes title="Notas de partidas" notes={notes} empty="Ainda não há notas dos feeds Brasileirão, Série B ou Copa do Brasil." />
     </Container>
   );
 };

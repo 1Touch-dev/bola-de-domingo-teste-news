@@ -10,7 +10,7 @@ export const GET = async () => {
 
   const body = `# ${site.name}
 
-> ${site.tagline}. Mesa independente em São Paulo. Cobre o futebol de domingo no Brasil: praças da Taça de Domingo, tardes do Circuito da Tarde e a semana de seleção. Idioma: pt-BR. Não publica tabela da CBF, elenco, nem classificação oficial de Brasileirão, Copa do Brasil ou Libertadores.
+> ${site.tagline}. Mesa independente em São Paulo. Cobre o futebol de domingo no Brasil: praças da Taça de Domingo, tardes do Circuito da Tarde e a semana de seleção. Idioma: pt-BR. A seção /futebol publica jogos, classificação e artilharia via API-Football CMS (Brasileirão, Série B, Copa do Brasil, Libertadores e Seleção).
 
 ## Key Sections
 ${sections}

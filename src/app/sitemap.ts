@@ -23,6 +23,7 @@ const entry = (
 const staticRoutes: Array<{ path: string; changeFrequency: Freq; priority: number }> = [
   { path: "/", changeFrequency: "hourly", priority: 1 },
   { path: "/noticias", changeFrequency: "daily", priority: 0.9 },
+  { path: "/futebol", changeFrequency: "hourly", priority: 0.9 },
   { path: "/pracas", changeFrequency: "daily", priority: 0.8 },
   { path: "/tardes", changeFrequency: "daily", priority: 0.8 },
   { path: "/calendario", changeFrequency: "daily", priority: 0.8 },

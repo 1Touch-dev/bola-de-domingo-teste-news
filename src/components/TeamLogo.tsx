@@ -6,14 +6,20 @@ import { useState } from "react";
 export interface ITeamLogoProps {
   src?: string;
   label: string;
-  size?: "xs" | "sm";
+  size?: "xs" | "sm" | "md" | "lg";
 }
+
+const SIZE = {
+  xs: { dim: 28, box: "size-7 text-[8px]" },
+  sm: { dim: 36, box: "size-9 text-[10px]" },
+  md: { dim: 56, box: "size-14 text-xs" },
+  lg: { dim: 88, box: "size-[5.5rem] text-sm" },
+} as const;
 
 export const TeamLogo = (props: ITeamLogoProps) => {
   const { src, label, size = "sm" } = props;
   const [failed, setFailed] = useState(false);
-  const dim = size === "xs" ? 28 : 36;
-  const box = size === "xs" ? "size-7 text-[8px]" : "size-9 text-[10px]";
+  const { dim, box } = SIZE[size];
   const mark = label.slice(0, 3).toUpperCase();
 
   if (!src || failed) {
