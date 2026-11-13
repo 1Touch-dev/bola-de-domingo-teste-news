@@ -11,6 +11,7 @@ import {
 } from "@/data";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ArticleCardImage } from "@/components/ArticleCardImage";
+import EditorialBanner from "@/components/cms/EditorialBanner";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { StandingsTable } from "@/components/StandingsTable";
 import { TeamLogo } from "@/components/TeamLogo";
@@ -105,6 +106,8 @@ export const HomeView = async () => {
           </Container>
         </div>
       ) : null}
+
+      <EditorialBanner />
 
       {matches.length > 0 || marked.length > 0 ? (
         <Container className="py-6">
